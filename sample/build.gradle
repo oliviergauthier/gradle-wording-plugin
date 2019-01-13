@@ -1,0 +1,27 @@
+//buildscript {
+//   repositories {
+//       mavenLocal()
+//       jcenter()
+//   }
+//   dependencies {
+//       classpath 'com.betomorrow.gradle:gradle-android-wording-plugin:1.0-SNAPSHOT'
+//   }
+//}
+//
+//apply plugin: 'com.betomorrow.gradle.wording'
+
+plugins {
+    id 'com.betomorrow.gradle.wording'
+}
+
+wording {
+    googleSheetUrl = "http://www.google.fr"
+    sheetName = "My App"
+
+    languages {
+        fr {
+            file = values-fr/strings.xml
+            column = "B"
+        }
+    }
+}
