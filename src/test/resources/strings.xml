@@ -1,0 +1,11 @@
+<resources>
+    <string name="key1">Bad value 1</string>
+    <string name="key2">Bad value 2</string>
+    <string name="key3">Bad value 3</string>
+    <string-array name="sections">
+        <item>Bad section 1</item>
+        <item>Bad section 2</item>
+    </string-array>
+    <string name="unknown_key">Value</string>
+    <string name="unknown_key">Value</string>
+</resources>

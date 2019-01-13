@@ -21,6 +21,8 @@ dependencies {
     compile 'com.google.api-client:google-api-client:1.27.0'
     compile 'com.google.oauth-client:google-oauth-client-jetty:1.27.0'
     compile 'com.google.apis:google-api-services-drive:v3-rev136-1.25.0'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
+    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.9.0'
 
     compile 'org.apache.poi:poi-ooxml:4.0.1'
 
