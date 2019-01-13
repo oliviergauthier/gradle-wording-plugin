@@ -7,12 +7,13 @@ interface Wordings {
 }
 
 interface Wording {
+    val language: String
     fun get(key: String) : String?
 }
 
 class UnknownLanguageException(language: String) : Exception("Language $language is unknown")
 
-class MutableWordings() : Wordings {
+class MutableWordings : Wordings {
 
     private val wordings : MutableMap<String, MutableWording> = HashMap()
 
@@ -26,7 +27,7 @@ class MutableWordings() : Wordings {
 
 }
 
-class MutableWording(val language: String) : Wording {
+class MutableWording(override val language: String) : Wording {
 
     private val wordings : MutableMap<String, String> = HashMap()
 
