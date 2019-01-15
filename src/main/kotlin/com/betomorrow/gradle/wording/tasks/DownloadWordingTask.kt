@@ -32,6 +32,7 @@ open class DownloadWordingTask : DefaultTask() {
             else -> GoogleDrive()
         }
 
+        logger.info("download $fileId to $output")
         googleDrive.downloadFile(fileId, DriveMimeType.XLSX, output)
     }
 

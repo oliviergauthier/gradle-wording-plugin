@@ -1,27 +1,25 @@
-//buildscript {
-//   repositories {
-//       mavenLocal()
-//       jcenter()
-//   }
-//   dependencies {
-//       classpath 'com.betomorrow.gradle:gradle-android-wording-plugin:1.0-SNAPSHOT'
-//   }
-//}
-//
-//apply plugin: 'com.betomorrow.gradle.wording'
-
-plugins {
-    id 'com.betomorrow.gradle.wording'
+buildscript {
+   repositories {
+       mavenLocal()
+       jcenter()
+   }
+   dependencies {
+       classpath 'com.betomorrow.gradle:gradle-android-wording-plugin:1.0-SNAPSHOT'
+   }
 }
 
-wording {
-    googleSheetUrl = "http://www.google.fr"
-    sheetName = "My App"
+apply plugin: 'com.betomorrow.gradle.wording'
 
+wording {
+    sheetId = "1UznpBPuRddr5gYPnRhNxkP-bcU0NHkhpTqi6B5V0QL0"
+    keysColumn = "A"
     languages {
-        fr {
-            file = values-fr/strings.xml
-            column = "B"
+        'default' {
+            output = "src/main/res/values/strings.xml"
+            column = "C"
+        }
+        'fr' {
+            column = "D"
         }
     }
 }

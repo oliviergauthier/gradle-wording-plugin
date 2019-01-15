@@ -24,6 +24,7 @@ class WordingPlugin : Plugin<Project> {
                             "Download translations to ${wordingExtension.wordingFile.relativeTo(project.projectDir)}"
                     t.fileId = wordingExtension.sheetId
                     t.output = wordingExtension.wordingFile
+                    t.outputs.upToDateWhen { false }
                 }.get()
 
                 val updateWordingTask = tasks.register("updateWording") { t ->
@@ -45,7 +46,6 @@ class WordingPlugin : Plugin<Project> {
                         t.keysColumn = wordingExtension.keysColumn
                         t.column = language.column
                     }
-
                     task.get().mustRunAfter(downloadWordingTask)
                     updateWordingTask.dependsOn(task)
                 }
