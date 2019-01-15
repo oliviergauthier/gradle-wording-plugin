@@ -9,6 +9,7 @@ interface Wordings {
 interface Wording {
     val language: String
     fun get(key: String) : String?
+    fun containsKey(key: String) : Boolean
 }
 
 class UnknownLanguageException(language: String) : Exception("Language $language is unknown")
@@ -29,7 +30,11 @@ class MutableWordings : Wordings {
 
 class MutableWording(override val language: String) : Wording {
 
-    private val wordings : MutableMap<String, String> = HashMap()
+    private val wordings = HashMap<String, String>()
+
+    override fun containsKey(key: String): Boolean {
+        return wordings.containsKey(key)
+    }
 
     override fun get(key : String) : String? {
         return wordings.getOrDefault(key, null)

@@ -99,3 +99,9 @@ publishing {
     }
 }
 
+
+wrapper {
+    gradleVersion = "5.1"
+    distributionType = Wrapper.DistributionType.ALL
+}
+

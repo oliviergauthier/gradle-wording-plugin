@@ -10,28 +10,43 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.util.store.FileDataStoreFactory
-import java.io.File
-import java.io.InputStreamReader
-import java.io.IOException
 import com.google.api.services.drive.Drive
-import java.io.FileOutputStream
+import com.google.common.io.Files
+import java.io.*
 
-class GoogleDrive(private val credentialPath: String = "/credentials.json") {
+class GoogleDrive() {
+
+    private var credentialPath : String? = null
+    private var clientId: String? = null
+    private var clientSecret : String? = null
+
+    constructor(clientId: String?, clientSecret: String?) : this() {
+        this.clientId = clientId
+        this.clientSecret = clientSecret
+    }
+
+    constructor(credentialPath: String?) : this() {
+        this.credentialPath = credentialPath
+    }
+
+    private fun getAuthorizationCodeFlowBuilder(httpTransport: NetHttpTransport) : GoogleAuthorizationCodeFlow.Builder {
+        if (clientId != null && clientSecret != null) {
+            return GoogleAuthorizationCodeFlow.Builder(httpTransport, jsonFactory, clientId, clientSecret, SCOPES)
+        }
+        val credentialStream = if (credentialPath != null) {
+            FileInputStream(credentialPath)
+        } else {
+            GoogleDrive::class.java.getResourceAsStream(CREDENTIALS_FILE_PATH)
+        }
+
+        val clientSecrets = GoogleClientSecrets.load(jsonFactory, InputStreamReader(credentialStream))
+
+        return GoogleAuthorizationCodeFlow.Builder(httpTransport, jsonFactory, clientSecrets, SCOPES)
+    }
 
     @Throws(IOException::class)
     private fun getCredentials(httpTransport: NetHttpTransport): Credential {
-        // Load client secrets.
-        val credentialInputStream = GoogleDrive::class.java.getResourceAsStream(
-            CREDENTIALS_FILE_PATH
-        )
-        val clientSecrets = GoogleClientSecrets.load(jsonFactory, InputStreamReader(credentialInputStream))
-
-        // Build flow and trigger user authorization request.
-        val flow = GoogleAuthorizationCodeFlow
-            .Builder(httpTransport,
-                jsonFactory, clientSecrets,
-                SCOPES
-            )
+        val flow = getAuthorizationCodeFlowBuilder(httpTransport)
             .setDataStoreFactory(FileDataStoreFactory(File(TOKENS_DIRECTORY_PATH)))
             .setAccessType("offline")
             .build()
@@ -45,11 +60,11 @@ class GoogleDrive(private val credentialPath: String = "/credentials.json") {
             .authorize("user")
     }
 
-    fun downloadFile(fileId : String, mimeType: DriveMimeType) : String {
-        return downloadFile(fileId, mimeType.value)
+    fun downloadFile(fileId : String, mimeType: DriveMimeType, output: File) {
+        return downloadFile(fileId, mimeType.value, output)
     }
 
-    fun downloadFile(fileId : String, mimeType: String? = null) : String {
+    fun downloadFile(fileId : String, mimeType: String? = null, output: File) {
         val httpTransport = GoogleNetHttpTransport.newTrustedTransport()
 
         val service = Drive
@@ -64,11 +79,10 @@ class GoogleDrive(private val credentialPath: String = "/credentials.json") {
             service.files().get(fileId)
         }
 
-        val outFilePath = "build/wording/$fileId.xlsx"
-        val out = FileOutputStream(outFilePath)
+        Files.createParentDirs(output)
+        val out = FileOutputStream(output)
         export.executeAndDownloadTo(out)
         out.flush()
-        return outFilePath
     }
 
     companion object {

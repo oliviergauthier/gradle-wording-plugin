@@ -7,7 +7,8 @@ import org.junit.jupiter.api.Test
 
 class WordingPluginIntTest {
 
-    @Rule val testProjectDir = TemporaryFolder()
+    @Rule
+    val testProjectDir = TemporaryFolder()
 
     @Test
     fun testDownloadWording() {
@@ -15,30 +16,40 @@ class WordingPluginIntTest {
         val buildFile = testProjectDir.newFile("build.gradle")
 
         buildFile.appendText("""
-plugins {
-    id 'com.betomorrow.gradle.wording'
-}
+            plugins {
+                id 'com.betomorrow.gradle.wording'
+            }
 
-wording {
-    googleSheetUrl = "http://www.google.fr"
-    sheetName = "My App"
+            wording {
+                credentials = "~/.credentials.json"
+                clientId = ""
+                clientSecret = ""
 
-    languages {
-        fr {
-            file = "values-fr/strings.xml"
-            column = "B"
-        }
-        en {
-            file = "values/strings.xml"
-            column = "c"
-        }
-    }
-}
-""".trimIndent())
+                sheetId = "qwertyuiop"
+                filename = "wording.xlsx"
+                skipHeaders = true
+                keysColumn = "A"
+                languages {
+                    'default' {
+                        output = "src/main/res/values/strings.xml"
+                        column = "C"
+                    }
+                    'fr' {
+//                        output = "src/main/res/values-fr/strings.xml"
+                        column = "D"
+                    }
+                    'es' {
+//                        output = "src/main/res/values-es/strings.xml"
+                        column = "E"
+                    }
+                }
+            }
+            """.trimIndent()
+        )
 
         val result = GradleRunner.create()
             .withProjectDir(testProjectDir.root)
-            .withArguments("downloadWording", "--stacktrace")
+            .withArguments("tasks", "--stacktrace", "--all")
             .withPluginClasspath()
             .withDebug(true)
             .build()

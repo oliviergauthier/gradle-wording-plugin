@@ -1,18 +1,38 @@
 package com.betomorrow.gradle.wording.tasks
 
+import com.betomorrow.gradle.wording.infra.drive.DriveMimeType
+import com.betomorrow.gradle.wording.infra.drive.GoogleDrive
 import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.Optional
+import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
+import java.io.File
 
-class DownloadWordingTask : DefaultTask() {
+open class DownloadWordingTask : DefaultTask() {
 
-    var url : String? = null
+    @Optional
+    var clientId : String? = null
 
-    var outDir = project.buildDir
+    @Optional
+    var clientSecret : String? = null
+
+    @Optional
+    var credentialPath : String? = null
+
+    lateinit var fileId : String
+
+    @OutputFile
+    lateinit var output : File
 
     @TaskAction
     fun download() {
+        val googleDrive = when {
+            clientId != null && clientSecret != null -> GoogleDrive(clientId, clientSecret)
+            credentialPath != null -> GoogleDrive(credentialPath)
+            else -> GoogleDrive()
+        }
 
+        googleDrive.downloadFile(fileId, DriveMimeType.XLSX, output)
     }
-
 
 }

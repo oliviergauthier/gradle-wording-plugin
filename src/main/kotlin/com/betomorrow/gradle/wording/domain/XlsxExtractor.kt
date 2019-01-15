@@ -4,16 +4,13 @@ import org.apache.poi.ss.usermodel.WorkbookFactory
 import java.io.File
 
 class XlsxExtractor(private val path: String,
-                    private val keyColumn: Column,
-                    private val valuesColumn: List<Language>,
+                    private val keysColumn: Column,
                     private val skipHeader : Boolean = true) {
 
-    fun extract() : Wordings {
-        val wordings = MutableWordings()
+    fun extract(valuesColumn: Column) : Map<String, String> {
+        val result = HashMap<String, String>()
 
         val workbook = WorkbookFactory.create(File(path))
-
-        println("Found ${workbook.numberOfSheets} sheets")
 
         val sheetIterator = workbook.sheetIterator()
         while(sheetIterator.hasNext()) {
@@ -25,17 +22,13 @@ class XlsxExtractor(private val path: String,
             }
             while(rowIterator.hasNext()) {
                 val row = rowIterator.next()
-                val key = row.getCell(keyColumn.index).stringCellValue
-                valuesColumn.forEach {
-                    val value = row.getCell(it.index).stringCellValue
-                    wordings.getOrPut(it.name).add(key, value)
-                    println("language=${it.name}, key=$key, value=$value")
-                }
-
+                val key = row.getCell(keysColumn.index).stringCellValue
+                val value = row.getCell(valuesColumn.index).stringCellValue
+                result.put(key, value)
             }
         }
 
-        return wordings
+        return result
     }
 
 }
