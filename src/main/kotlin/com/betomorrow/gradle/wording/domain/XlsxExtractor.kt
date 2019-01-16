@@ -35,6 +35,8 @@ class XlsxExtractor(private val path: String,
             }
         }
 
+        workbook.close()
+
         return result
     }
 
