@@ -26,9 +26,11 @@ class WordingPluginIntTest {
                 clientSecret = ""
 
                 sheetId = "qwertyuiop"
+                sheetNames = ["commons", "app"]
                 filename = "wording.xlsx"
                 skipHeaders = true
                 keysColumn = "A"
+
                 languages {
                     'default' {
                         output = "src/main/res/values/strings.xml"

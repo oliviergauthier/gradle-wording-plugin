@@ -17,7 +17,7 @@ open class DownloadWordingTask : DefaultTask() {
     var clientSecret : String? = null
 
     @Optional
-    var credentialPath : String? = null
+    var credentials : File? = null
 
     lateinit var fileId : String
 
@@ -28,7 +28,7 @@ open class DownloadWordingTask : DefaultTask() {
     fun download() {
         val googleDrive = when {
             clientId != null && clientSecret != null -> GoogleDrive(clientId, clientSecret)
-            credentialPath != null -> GoogleDrive(credentialPath)
+            credentials != null -> GoogleDrive(credentials)
             else -> GoogleDrive()
         }
 

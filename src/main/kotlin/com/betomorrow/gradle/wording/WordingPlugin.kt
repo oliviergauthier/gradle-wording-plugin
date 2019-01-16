@@ -1,6 +1,7 @@
 package com.betomorrow.gradle.wording
 
 import com.betomorrow.gradle.wording.extensions.WORDING_EXTENSION_NAME
+import com.betomorrow.gradle.wording.extensions.WordingLanguageExtension
 import com.betomorrow.gradle.wording.extensions.WordingPluginExtension
 import com.betomorrow.gradle.wording.tasks.DownloadWordingTask
 import com.betomorrow.gradle.wording.tasks.UpdateWordingTask
@@ -22,6 +23,10 @@ class WordingPlugin : Plugin<Project> {
                     t.group = GROUP
                     t.description =
                             "Download translations to ${wordingExtension.wordingFile.relativeTo(project.projectDir)}"
+                    t.credentials = wordingExtension.credentials?.let { project.rootDir.resolve(it) }
+                    t.clientId = wordingExtension.clientId
+                    t.clientSecret = wordingExtension.clientSecret
+
                     t.fileId = wordingExtension.sheetId
                     t.output = wordingExtension.wordingFile
                     t.outputs.upToDateWhen { false }
@@ -45,6 +50,8 @@ class WordingPlugin : Plugin<Project> {
                         t.output = language.outputFile
                         t.keysColumn = wordingExtension.keysColumn
                         t.column = language.column
+                        t.sheetNames = wordingExtension.sheetNames
+                        t.failOnMissingKeys = language.name == WordingLanguageExtension.DEFAULT_NAME
                     }
                     task.get().mustRunAfter(downloadWordingTask)
                     updateWordingTask.dependsOn(task)

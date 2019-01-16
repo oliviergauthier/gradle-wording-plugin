@@ -9,7 +9,12 @@ const val WORDING_EXTENSION_NAME = "wording"
 
 open class WordingPluginExtension(val project: Project) {
 
+    var credentials : String? = null
+    var clientId: String? = null
+    var clientSecret: String? = null
+
     lateinit var sheetId : String
+    var sheetNames: List<String> = emptyList()
 
     var skipHeaders : Boolean = true
 

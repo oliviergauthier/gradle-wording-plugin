@@ -9,7 +9,13 @@ import javax.xml.transform.stream.StreamResult
 
 class XmlUpdater(val path: String) {
 
-    fun update(wording: Map<String, String>) {
+    /**
+     * Update file with wording and returns updated keys
+     */
+    fun update(wording: Map<String, String>) : Set<String> {
+
+        val outputKeys = HashSet<String>()
+
         val documentBuilderFactory = DocumentBuilderFactory.newInstance()
         val documentBuilder = documentBuilderFactory.newDocumentBuilder()
         val document = documentBuilder.parse(File(path))
@@ -20,6 +26,7 @@ class XmlUpdater(val path: String) {
             val key = item.attributes.getNamedItem("name").nodeValue
             if (wording.containsKey(key)) {
                 item.textContent = wording[key]
+                outputKeys.add(key)
             }
         }
 
@@ -32,6 +39,7 @@ class XmlUpdater(val path: String) {
                 val subKey  = "$key[$c]"
                 if (wording.containsKey(subKey)) {
                     childs.item(c).textContent = wording[subKey]
+                    outputKeys.add(subKey)
                 }
             }
         }
@@ -41,6 +49,8 @@ class XmlUpdater(val path: String) {
         val domSource = DOMSource(document)
         val streamResult = StreamResult(File(path))
         transformer.transform(domSource, streamResult)
+
+        return outputKeys
     }
 
 }

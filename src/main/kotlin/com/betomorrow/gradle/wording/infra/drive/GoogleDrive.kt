@@ -16,7 +16,7 @@ import java.io.*
 
 class GoogleDrive() {
 
-    private var credentialPath : String? = null
+    private var credentials : File? = null
     private var clientId: String? = null
     private var clientSecret : String? = null
 
@@ -25,16 +25,16 @@ class GoogleDrive() {
         this.clientSecret = clientSecret
     }
 
-    constructor(credentialPath: String?) : this() {
-        this.credentialPath = credentialPath
+    constructor(credentials: File?) : this() {
+        this.credentials = credentials
     }
 
     private fun getAuthorizationCodeFlowBuilder(httpTransport: NetHttpTransport) : GoogleAuthorizationCodeFlow.Builder {
         if (clientId != null && clientSecret != null) {
             return GoogleAuthorizationCodeFlow.Builder(httpTransport, jsonFactory, clientId, clientSecret, SCOPES)
         }
-        val credentialStream = if (credentialPath != null) {
-            FileInputStream(credentialPath)
+        val credentialStream = if (credentials != null) {
+            FileInputStream(credentials)
         } else {
             GoogleDrive::class.java.getResourceAsStream(CREDENTIALS_FILE_PATH)
         }
