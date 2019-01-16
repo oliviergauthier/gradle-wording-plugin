@@ -31,7 +31,7 @@ class XmlUpdater(val path: String) {
                 missingWordings.filter { sectionPattern.matches(it)},
                 wording
             )
-            outputKeys.clear()
+            outputKeys.addAll(wording.keys)
         }
 
         writeToFile(document, path)
