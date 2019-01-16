@@ -52,6 +52,7 @@ class WordingPlugin : Plugin<Project> {
                         t.column = language.column
                         t.sheetNames = wordingExtension.sheetNames
                         t.failOnMissingKeys = language.name == WordingLanguageExtension.DEFAULT_NAME
+                        t.addMissingKeys = wordingExtension.addMissingKeys
                     }
                     task.get().mustRunAfter(downloadWordingTask)
                     updateWordingTask.dependsOn(task)

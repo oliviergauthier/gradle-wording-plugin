@@ -1,40 +1,58 @@
 package com.betomorrow.gradle.wording.domain
 
+import org.w3c.dom.Document
 import org.w3c.dom.Element
-import java.io.File
-import javax.xml.parsers.DocumentBuilderFactory
-import javax.xml.transform.TransformerFactory
-import javax.xml.transform.dom.DOMSource
-import javax.xml.transform.stream.StreamResult
 
 class XmlUpdater(val path: String) {
 
     /**
      * Update file with wording and returns updated keys
      */
-    fun update(wording: Map<String, String>) : Set<String> {
+    fun update(wording: Map<String, String>, addMissingWording: Boolean) : Set<String> {
 
         val outputKeys = HashSet<String>()
 
-        val documentBuilderFactory = DocumentBuilderFactory.newInstance()
-        val documentBuilder = documentBuilderFactory.newDocumentBuilder()
-        val document = documentBuilder.parse(File(path))
+        val document = loadOrCreateXmlDocument(path)
 
-        val strings = document.getElementsByTagName("string")
-        for (i in 0 until strings.length) {
-            val item = strings.item(i)
-            val key = item.attributes.getNamedItem("name").nodeValue
+        updateStrings(document, wording, outputKeys)
+        updateStringArrays(document, wording, outputKeys)
+
+        val missingWordings = wording.keys - outputKeys
+        if (addMissingWording) {
+            val resource = document.firstOrCreateTagName(RESOURCE_TAG_NAME)
+            addMissingStrings(
+                resource,
+                missingWordings.filter { !sectionPattern.matches(it)},
+                wording
+            )
+
+            addMissingStringArrays(
+                resource,
+                missingWordings.filter { sectionPattern.matches(it)},
+                wording
+            )
+            outputKeys.clear()
+        }
+
+        writeToFile(document, path)
+
+        return outputKeys
+    }
+
+    private fun updateStrings(document: Document, wording: Map<String, String>, outputKeys: HashSet<String>) {
+        document.getElementsIteratorByTagName(STRING_TAG_NAME).forEach { node ->
+            val key = node.getAttribute(NAME_ATTR)
             if (wording.containsKey(key)) {
-                item.textContent = wording[key]
+                node.textContent = wording[key]
                 outputKeys.add(key)
             }
         }
+    }
 
-        val stringArrays = document.getElementsByTagName("string-array")
-        for(i in 0 until stringArrays.length) {
-            val item = stringArrays.item(i)
-            val key = item.attributes.getNamedItem("name").nodeValue
-            val childs = (item as Element).getElementsByTagName("item")
+    private fun updateStringArrays(document: Document, wording: Map<String, String>, outputKeys: HashSet<String>) {
+        document.getElementsIteratorByTagName(STRING_ARRAY_TAG_NAME).forEach { node ->
+            val key = node.getAttribute(NAME_ATTR)
+            val childs = (node as Element).getElementsByTagName(ITEM_TAG_NAME)
             for(c in 0 until childs.length) {
                 val subKey  = "$key[$c]"
                 if (wording.containsKey(subKey)) {
@@ -43,14 +61,61 @@ class XmlUpdater(val path: String) {
                 }
             }
         }
+    }
 
-        val transformerFactory = TransformerFactory.newInstance()
-        val transformer = transformerFactory.newTransformer()
-        val domSource = DOMSource(document)
-        val streamResult = StreamResult(File(path))
-        transformer.transform(domSource, streamResult)
+    private fun addMissingStrings(resources: Element, keys : List<String>, wording: Map<String, String>) {
+        keys.forEach { key ->
+            resources.appendNewChild(STRING_TAG_NAME) {
+                setAttribute(NAME_ATTR, key)
+                wording[key]?.let {
+                    appendTextNode(it)
+                }
 
-        return outputKeys
+            }
+        }
+    }
+
+    private fun addMissingStringArrays(resources: Element, keys : List<String>, wording: Map<String, String>) {
+        val arraysSizes = computeStringArraysSize(keys)
+
+        arraysSizes.forEach { key, value ->
+            val node = resources
+                .getElementsIteratorByTagName(STRING_ARRAY_TAG_NAME)
+                .firstOrNull {  it.hasAttribute(NAME_ATTR, key) }
+                ?:resources.appendNewChild(STRING_ARRAY_TAG_NAME) {
+                    setAttribute(NAME_ATTR, key)
+                }
+
+            val elt = node as Element
+            val missingNodeCount = value - elt.getElementsByTagName(ITEM_TAG_NAME).length
+            for(i in 0 until missingNodeCount) {
+                elt.appendNewChild(ITEM_TAG_NAME)
+            }
+        }
+
+        updateStringArrays(resources.ownerDocument, wording, HashSet())
+    }
+
+    private fun computeStringArraysSize(keys : List<String>) : Map<String, Int> {
+        val values = HashMap<String, Int>()
+        keys.forEach {
+            val result = sectionPattern.find(it)
+            if (result != null) {
+                val key = result.groupValues[1]
+                val index = result.groupValues[2]
+                values[key] = Math.max(values[key]?:1, index.toInt() + 1 )
+            }
+        }
+        return values
+    }
+
+    companion object {
+        val sectionPattern = Regex("(.*)\\[([0-9]*)\\]")
+        const val RESOURCE_TAG_NAME = "resources"
+        const val STRING_ARRAY_TAG_NAME = "string-array"
+        const val STRING_TAG_NAME = "string"
+        const val ITEM_TAG_NAME = "item"
+        const val NAME_ATTR = "name"
     }
 
 }

@@ -22,6 +22,8 @@ open class WordingPluginExtension(val project: Project) {
 
     var keysColumn : String = "A"
 
+    var addMissingKeys : Boolean = false
+
     var languages : NamedDomainObjectContainer<WordingLanguageExtension> = project.container(WordingLanguageExtension::class.java) {
         WordingLanguageExtension(it, project)
     }

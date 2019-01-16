@@ -1,11 +1,10 @@
 <resources>
     <string name="key1" translatable="fale">another value 1</string>
     <string formatted="true" name="key2">another value 2</string>
-    <string name="key3">another value 3</string>
     <string-array name="sections">
         <item>Section de recherche</item>
-        <item>Section retrouvée</item>
+    <item>Section retrouvée</item>
     </string-array>
     <string name="unknown_key">Value</string>
-    <string name="unknown_key">Value</string>
+<string name="key3">another value 3</string>
 </resources>
