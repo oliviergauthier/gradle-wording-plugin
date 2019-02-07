@@ -14,18 +14,18 @@ import com.google.api.services.drive.Drive
 import com.google.common.io.Files
 import java.io.*
 
-class GoogleDrive() {
+class GoogleDrive(private val tokenDirectory: String = TOKENS_DIRECTORY_PATH) {
 
     private var credentials : File? = null
     private var clientId: String? = null
     private var clientSecret : String? = null
 
-    constructor(clientId: String?, clientSecret: String?) : this() {
+    constructor(clientId: String?, clientSecret: String?, tokenDirectory: String = TOKENS_DIRECTORY_PATH) : this(tokenDirectory) {
         this.clientId = clientId
         this.clientSecret = clientSecret
     }
 
-    constructor(credentials: File?) : this() {
+    constructor(credentials: File?, tokenDirectory: String = TOKENS_DIRECTORY_PATH) : this(tokenDirectory) {
         this.credentials = credentials
     }
 
@@ -47,7 +47,7 @@ class GoogleDrive() {
     @Throws(IOException::class)
     private fun getCredentials(httpTransport: NetHttpTransport): Credential {
         val flow = getAuthorizationCodeFlowBuilder(httpTransport)
-            .setDataStoreFactory(FileDataStoreFactory(File(TOKENS_DIRECTORY_PATH)))
+            .setDataStoreFactory(FileDataStoreFactory(File(tokenDirectory)))
             .setAccessType("offline")
             .build()
 
