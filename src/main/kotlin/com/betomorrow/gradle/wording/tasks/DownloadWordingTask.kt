@@ -39,10 +39,9 @@ open class DownloadWordingTask : DefaultTask() {
 
     val tokenDirectory: String
         get() {
-            return Paths.get(System.getProperty("user.home"))
+            return project.projectDir
                 .resolve(".gradle")
                 .resolve("wording-plugin")
-                .resolve("${project.name}")
                 .resolve("tokens")
                 .toString()
         }
