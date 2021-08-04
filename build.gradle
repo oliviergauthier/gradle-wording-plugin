@@ -6,7 +6,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "com.gradle.publish:plugin-publish-plugin:0.9.7"
+        classpath "com.gradle.publish:plugin-publish-plugin:0.15.0"
     }
 }
 
@@ -20,8 +20,8 @@ apply plugin: 'java-gradle-plugin'
 apply plugin: 'kotlin'
 apply plugin: 'maven-publish'
 
-group 'com.betomorrow.gradle'
-version '1.3.3'
+group 'gradle.plugin.com.betomorrow.gradle'
+version '1.3.4'
 
 repositories {
     mavenCentral()
@@ -91,6 +91,12 @@ check.dependsOn integrationTest
 
 gradlePlugin {
     testSourceSets sourceSets.integrationTest
+    plugins {
+        wordingPlugin {
+            id = 'com.betomorrow.gradle.wording'
+            implementationClass = 'com.betomorrow.gradle.wording.WordingPlugin'
+        }
+    }
 }
 
 /**
@@ -100,15 +106,6 @@ gradlePlugin {
 task sourceJar(type: Jar) {
     classifier "sources"
     from sourceSets.main.allSource
-}
-
-publishing {
-    publications {
-        BintrayPublication(MavenPublication) {
-            from components.java
-            artifact sourceJar
-        }
-    }
 }
 
 wrapper {
@@ -123,13 +120,10 @@ pluginBundle {
     tags = ['android', 'wording', 'plugin', 'tool']
 
     plugins {
-
-        libraryPlugin {
+        wordingPlugin {
             id = 'com.betomorrow.gradle.wording'
             displayName = 'Gradle Wording Plugin'
             description = 'Plugin to import wording from Google Sheet then integrate it in standard translations files.'
         }
-
     }
-
 }
