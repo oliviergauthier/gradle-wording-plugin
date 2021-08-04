@@ -4,6 +4,7 @@ import com.betomorrow.gradle.wording.domain.Column
 import com.betomorrow.gradle.wording.domain.XlsxExtractor
 import com.betomorrow.gradle.wording.domain.XmlUpdater
 import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
@@ -18,12 +19,18 @@ open class UpdateWordingTask : DefaultTask() {
     @OutputFile
     lateinit var output: File
 
+    @Input
     var skipHeaders: Boolean = true
+    @Input
     lateinit var keysColumn: String
+    @Input
     lateinit var column: String
 
+    @Input
     var sheetNames = emptyList<String>()
+    @Input
     var failOnMissingKeys = false
+    @Input
     var addMissingKeys = false
 
     @TaskAction
