@@ -91,6 +91,12 @@ check.dependsOn integrationTest
 
 gradlePlugin {
     testSourceSets sourceSets.integrationTest
+    plugins {
+        wordingPlugin {
+            id = 'com.betomorrow.gradle.wording'
+            implementationClass = 'com.betomorrow.gradle.wording.WordingPlugin'
+        }
+    }
 }
 
 /**
@@ -123,13 +129,10 @@ pluginBundle {
     tags = ['android', 'wording', 'plugin', 'tool']
 
     plugins {
-
-        libraryPlugin {
+        wordingPlugin {
             id = 'com.betomorrow.gradle.wording'
             displayName = 'Gradle Wording Plugin'
             description = 'Plugin to import wording from Google Sheet then integrate it in standard translations files.'
         }
-
     }
-
 }
