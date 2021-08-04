@@ -1,6 +1,5 @@
 package com.betomorrow.gradle.wording.domain
 
-import com.sun.org.apache.xml.internal.serializer.OutputPropertiesFactory
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.Node
@@ -32,8 +31,8 @@ fun writeToFile(document : Document, path: String) {
     transformer.setOutputProperty(OutputKeys.INDENT, "yes")
     transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC,"yes");
     transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-    transformer.setOutputProperty(OutputPropertiesFactory.S_KEY_INDENT_AMOUNT, "4")
-    transformer.setOutputProperty(OutputPropertiesFactory.S_KEY_LINE_SEPARATOR, "4")
+    transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4")
+    transformer.setOutputProperty("{http://xml.apache.org/xslt}line-separator", "4")
 
     val domSource = DOMSource(document)
     val streamResult = StreamResult(File(path))
