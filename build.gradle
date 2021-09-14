@@ -23,7 +23,7 @@ apply plugin: 'java-gradle-plugin'
 apply plugin: 'kotlin'
 apply plugin: 'maven-publish'
 
-group 'com.betomorrow.gradle'
+group 'gradle.plugin.com.betomorrow.gradle'
 version '2.0.0'
 
 repositories {
