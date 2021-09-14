@@ -40,7 +40,7 @@ class WordingPlugin : Plugin<Project> {
 
                 wordingExtension.languages.forEach { language ->
                     val task = p.tasks.register(
-                        "updateWording${language.name.capitalize()}",
+                        "updateWording${language.name.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }}",
                         UpdateWordingTask::class.java
                     ) { t ->
                         t.group = GROUP

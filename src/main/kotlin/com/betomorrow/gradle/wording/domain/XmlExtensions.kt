@@ -1,6 +1,5 @@
 package com.betomorrow.gradle.wording.domain
 
-import com.sun.org.apache.xml.internal.serializer.OutputPropertiesFactory
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.Node
@@ -10,9 +9,11 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.transform.OutputKeys
+import javax.xml.transform.Transformer
 import javax.xml.transform.TransformerFactory
 import javax.xml.transform.dom.DOMSource
 import javax.xml.transform.stream.StreamResult
+import javax.xml.transform.stream.StreamSource
 
 fun loadOrCreateXmlDocument(path : String) : Document {
     val documentBuilderFactory = DocumentBuilderFactory.newInstance()
@@ -25,19 +26,18 @@ fun loadOrCreateXmlDocument(path : String) : Document {
 }
 
 fun writeToFile(document : Document, path: String) {
-    val transformerFactory = TransformerFactory.newInstance()
-    transformerFactory.setAttribute("indent-number", 4)
-
-    val transformer = transformerFactory.newTransformer()
-    transformer.setOutputProperty(OutputKeys.INDENT, "yes")
-    transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC,"yes");
-    transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-    transformer.setOutputProperty(OutputPropertiesFactory.S_KEY_INDENT_AMOUNT, "4")
-    transformer.setOutputProperty(OutputPropertiesFactory.S_KEY_LINE_SEPARATOR, "4")
+    val transformer = prettyPrintedTransformer()
+    transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC,"yes")
+    transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes")
 
     val domSource = DOMSource(document)
     val streamResult = StreamResult(File(path))
     transformer.transform(domSource, streamResult)
+}
+
+private fun prettyPrintedTransformer(): Transformer {
+    val schema = object {}.javaClass.getResource("/pretty-print-format.xslt")!!
+    return TransformerFactory.newInstance().newTransformer(StreamSource(schema.openStream()))
 }
 
 /**
@@ -109,18 +109,6 @@ fun Element.getElementsIteratorByTagName(name: String) : Iterable<Node>{
                     yield(elements.item(i))
                 }
             }
-        }
-    }
-}
-
-fun Element.firstOrCreateTagName(name: String) : Element {
-    return this.getElementsByTagName(name).let {
-        if (it.length > 0) {
-            it.item(0) as Element
-        } else {
-            val node = this.ownerDocument.createElement(name)
-            this.appendChild(node)
-            node
         }
     }
 }
