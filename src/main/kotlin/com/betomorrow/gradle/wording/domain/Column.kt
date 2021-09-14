@@ -6,7 +6,7 @@ class Column(val name: String) {
 
     init {
         assert(name.matches(pattern))
-        index = name.toUpperCase()
+        index = name.uppercase()
             .reversed()
             .map { (it - 'A' + 1) }
             .reduceIndexed { i, acc, c ->   acc + c * pow26(i)} - 1
