@@ -24,7 +24,7 @@ apply plugin: 'kotlin'
 apply plugin: 'maven-publish'
 
 group 'gradle.plugin.com.betomorrow.gradle'
-version '2.0.0'
+version '2.0.3'
 
 repositories {
     mavenCentral()
@@ -51,6 +51,9 @@ dependencies {
     testRuntimeOnly "cglib:cglib-nodep:3.2.4"          // allows mocking of classes (in addition to interfaces)
     testRuntimeOnly "org.objenesis:objenesis:2.4"    // allows mocking of classes without default constructor (together with CGLIB)
 }
+
+sourceCompatibility = JavaVersion.VERSION_13
+targetCompatibility = JavaVersion.VERSION_13
 
 compileKotlin {
     kotlinOptions.jvmTarget = JavaVersion.VERSION_13
