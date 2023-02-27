@@ -20,16 +20,18 @@ open class WordingLanguageExtension(val name: String, val project: Project) {
                 output != null -> {
                     val file = project.projectDir.resolve(output!!)
                     if (file.isDirectory) {
-                        file.resolve("strings.xml")
+                        file.resolve("messages.properties")
                     } else {
                         file
                     }
                 }
+
                 name == DEFAULT_NAME -> {
-                    project.projectDir.resolve("src/main/res/values/strings.xml")
+                    project.projectDir.resolve("src/main/resources/messages.properties")
                 }
+
                 else -> {
-                    project.projectDir.resolve("src/main/res/values-$name/strings.xml")
+                    project.projectDir.resolve("src/main/resources/messages_$name.properties")
                 }
 
             }

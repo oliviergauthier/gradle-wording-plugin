@@ -24,7 +24,7 @@ apply plugin: 'kotlin'
 apply plugin: 'maven-publish'
 
 group 'gradle.plugin.com.betomorrow.gradle'
-version '2.0.4'
+version '1.0.0-SNAPSHOT'
 
 repositories {
     mavenCentral()

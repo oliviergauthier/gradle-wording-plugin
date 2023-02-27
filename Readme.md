@@ -1,4 +1,4 @@
-# Android Wording Gradle Plugin
+# Spring Messages Wording Gradle Plugin
 
 ## Summary
 
@@ -23,7 +23,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "gradle.plugin.com.betomorrow.gradle:gradle-android-wording-plugin:1.3.2"
+        classpath "gradle.plugin.com.betomorrow.gradle:gradle-spring-wording-plugin:1.0.0"
     }
 }
 ```
@@ -63,7 +63,7 @@ Copy / Paste url in your browser, accept authorization and close browser
 
 [Authorization Sample](https://github.com/oliviergauthier/gradle-wording-plugin/blob/master/images/authorization.png)
 
-It will update wording files. In this sample, `app/src/main/res/values/strings.xml` and `app/src/main/res/values-fr/strings.xml`
+It will update wording files. In this sample, `src/main/resources/messages.properties` and `src/main/resources/messages_fr.properties`
 
 ## Tasks
 
@@ -93,11 +93,11 @@ wording {
 
     languages {
         'default' {
-            output "src/main/res/values/strings.xml" // Optional, default: "src/main/res/values/strings.xml"
+            output "src/main/resources/messages.properties" // Optional, default: "src/main/resources/messages.properties"
             column = "B"
         }
         'fr' {
-            output = "src/main/res/values-es/strings.xml" // Optional, default: "src/main/res/values-<LANGUAGE>/strings.xml"
+            output = "src/main/resources/messages_france.properties" // Optional, default: "src/main/resources/messages_<LANGUAGE>.properties"
             column = "C"
         }
         // [...] Add more languages here
@@ -127,7 +127,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "gradle.plugin.com.betomorrow.gradle:gradle-android-wording-plugin:1.3.2"
+        classpath "gradle.plugin.com.betomorrow.gradle:gradle-spring-wording-plugin:1.0.0"
     }
 }
 ```

@@ -1,8 +1,10 @@
 package com.betomorrow.gradle.wording.tasks
 
 import com.betomorrow.gradle.wording.domain.Column
+import com.betomorrow.gradle.wording.domain.PropertiesUpdater
+import com.betomorrow.gradle.wording.domain.Strategy
+import com.betomorrow.gradle.wording.domain.WordingCleanerFactory
 import com.betomorrow.gradle.wording.domain.XlsxExtractor
-import com.betomorrow.gradle.wording.domain.XmlUpdater
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
@@ -22,24 +24,34 @@ open class UpdateWordingTask : DefaultTask() {
 
     @Input
     var skipHeaders: Boolean = true
+
     @Internal
     lateinit var keysColumn: String
+
     @Internal
     lateinit var column: String
 
     @Input
     var sheetNames = emptyList<String>()
+
     @Input
     var failOnMissingKeys = false
+
     @Input
     var addMissingKeys = false
+
+    @Input
+    var cleaningStrategy: Strategy = Strategy.SPRING
 
     @TaskAction
     fun update() {
         val extractor = XlsxExtractor(source.absolutePath, Column(keysColumn), skipHeaders)
-        val updater = XmlUpdater(output.absolutePath)
+        val updater = PropertiesUpdater(output.absolutePath)
+        val cleaner = WordingCleanerFactory().build(cleaningStrategy)
+
         val wordings = extractor.extract(Column(column), sheetNames)
-        val updatedKeys = updater.update(wordings, addMissingKeys)
+        val cleanedWordings = cleaner.clean(wordings)
+        val updatedKeys = updater.update(cleanedWordings, addMissingKeys)
 
         val missingKeys = wordings.keys - updatedKeys
         if (missingKeys.isNotEmpty() && failOnMissingKeys) {
