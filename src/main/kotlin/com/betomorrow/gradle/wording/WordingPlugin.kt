@@ -22,7 +22,7 @@ class WordingPlugin : Plugin<Project> {
                 val downloadWordingTask = tasks.register("downloadWording", DownloadWordingTask::class.java) { t ->
                     t.group = GROUP
                     t.description =
-                            "Download translations to ${wordingExtension.wordingFile.relativeTo(project.projectDir)}"
+                        "Download translations to ${wordingExtension.wordingFile.relativeTo(project.projectDir)}"
                     t.credentials = wordingExtension.credentials?.let { project.rootDir.resolve(it) }
                     t.clientId = wordingExtension.clientId
                     t.clientSecret = wordingExtension.clientSecret
@@ -65,11 +65,9 @@ class WordingPlugin : Plugin<Project> {
                 }
             }
         }
-
     }
 
     companion object {
         const val GROUP = "Wording"
     }
-
 }

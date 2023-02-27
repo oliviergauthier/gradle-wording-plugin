@@ -58,7 +58,6 @@ open class UpdateWordingTask : DefaultTask() {
             throw MissingKeyException(missingKeys, output.relativeTo(project.rootDir))
         }
     }
-
 }
 
 class MissingKeyException(keys: Set<String>, file: File) :

@@ -33,10 +33,8 @@ open class WordingLanguageExtension(val name: String, val project: Project) {
                 else -> {
                     project.projectDir.resolve("src/main/resources/messages_$name.properties")
                 }
-
             }
         }
-
 
     companion object {
         const val DEFAULT_NAME = "default"

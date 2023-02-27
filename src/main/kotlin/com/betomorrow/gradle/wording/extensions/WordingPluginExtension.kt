@@ -9,22 +9,22 @@ const val WORDING_EXTENSION_NAME = "wording"
 
 open class WordingPluginExtension(val project: Project) {
 
-    var credentials : String? = null
+    var credentials: String? = null
     var clientId: String? = null
     var clientSecret: String? = null
 
-    lateinit var sheetId : String
+    lateinit var sheetId: String
     var sheetNames: List<String> = emptyList()
 
-    var skipHeaders : Boolean = true
+    var skipHeaders: Boolean = true
 
     var filename: String = "wording.xlsx"
 
-    var keysColumn : String = "A"
+    var keysColumn: String = "A"
 
-    var addMissingKeys : Boolean = false
+    var addMissingKeys: Boolean = false
 
-    var languages : NamedDomainObjectContainer<WordingLanguageExtension> = project.container(WordingLanguageExtension::class.java) {
+    var languages: NamedDomainObjectContainer<WordingLanguageExtension> = project.container(WordingLanguageExtension::class.java) {
         WordingLanguageExtension(it, project)
     }
 
@@ -32,8 +32,8 @@ open class WordingPluginExtension(val project: Project) {
         action.execute(languages)
     }
 
-    val wordingFile : File
-     get() {
-         return project.rootDir.resolve(filename)
-     }
+    val wordingFile: File
+        get() {
+            return project.rootDir.resolve(filename)
+        }
 }

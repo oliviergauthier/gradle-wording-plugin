@@ -15,7 +15,8 @@ class WordingPluginIntTest {
         testProjectDir.create()
         val buildFile = testProjectDir.newFile("build.gradle")
 
-        buildFile.appendText("""
+        buildFile.appendText(
+            """
             plugins {
                 id 'com.betomorrow.gradle.wording'
             }
@@ -56,8 +57,6 @@ class WordingPluginIntTest {
             .withDebug(true)
             .build()
 
-        println(result.getOutput())
-
+        println(result.output)
     }
-
 }

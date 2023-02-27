@@ -18,7 +18,6 @@ class ColumnTest {
         Assertions.assertThat(col.index).isEqualTo(1)
     }
 
-
     @Test
     fun testWithColumnZ() {
         val col = Column("z")

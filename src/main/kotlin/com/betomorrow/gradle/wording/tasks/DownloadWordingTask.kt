@@ -52,6 +52,4 @@ open class DownloadWordingTask : DefaultTask() {
                 .resolve("tokens")
                 .toString()
         }
-
-
 }
