@@ -132,7 +132,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "gradle.plugin.com.betomorrow.gradle:gradle-spring-wording-plugin:1.0.0"
+        classpath "gradle.plugin.com.betomorrow.gradle:gradle-wording-plugin:1.0.0"
     }
 }
 ```
