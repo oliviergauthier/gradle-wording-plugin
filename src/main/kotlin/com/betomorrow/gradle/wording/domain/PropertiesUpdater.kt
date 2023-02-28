@@ -1,5 +1,6 @@
 package com.betomorrow.gradle.wording.domain
 
+import java.nio.file.Paths
 import java.util.Properties
 
 class PropertiesUpdater(val path: String) {
@@ -11,7 +12,7 @@ class PropertiesUpdater(val path: String) {
 
         val outputKeys = HashSet<String>()
 
-        val properties = loadOrCreateProperties(path)
+        val properties = loadOrCreateProperties(Paths.get(path))
 
         updateStrings(properties, wording, outputKeys)
 

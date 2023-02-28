@@ -2,8 +2,7 @@ package com.betomorrow.gradle.wording.tasks
 
 import com.betomorrow.gradle.wording.domain.Column
 import com.betomorrow.gradle.wording.domain.PropertiesUpdater
-import com.betomorrow.gradle.wording.domain.Strategy
-import com.betomorrow.gradle.wording.domain.WordingCleanerFactory
+import com.betomorrow.gradle.wording.domain.WordingCleaner
 import com.betomorrow.gradle.wording.domain.XlsxExtractor
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
@@ -40,14 +39,11 @@ open class UpdateWordingTask : DefaultTask() {
     @Input
     var addMissingKeys = false
 
-    @Input
-    var cleaningStrategy: Strategy = Strategy.SPRING
-
     @TaskAction
     fun update() {
         val extractor = XlsxExtractor(source.absolutePath, Column(keysColumn), skipHeaders)
         val updater = PropertiesUpdater(output.absolutePath)
-        val cleaner = WordingCleanerFactory().build(cleaningStrategy)
+        val cleaner = WordingCleaner()
 
         val wordings = extractor.extract(Column(column), sheetNames)
         val cleanedWordings = cleaner.clean(wordings)

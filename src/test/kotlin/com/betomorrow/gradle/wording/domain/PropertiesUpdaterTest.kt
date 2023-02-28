@@ -5,25 +5,25 @@ import org.gradle.internal.impldep.org.junit.Rule
 import org.gradle.internal.impldep.org.junit.rules.TemporaryFolder
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
+import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 
-class XmlUpdaterTest {
+class PropertiesUpdaterTest {
 
     @Rule
     val testProjectDir = TemporaryFolder()
 
     @Test
     fun testUpdateExistingWording() {
-
-        val source = "src/test/resources/strings.xml"
-        val expected = "src/test/resources/strings-expected.xml"
+        val source = "src/test/resources/update-messages.properties"
+        val expected = "src/test/resources/update-messages-expected.properties"
 
         testProjectDir.create()
-        val copy = Paths.get(testProjectDir.root.absolutePath, "testUpdateExistingWording.xml")
+        val copy = Paths.get(testProjectDir.root.absolutePath, "testUpdateExistingWording.properties")
         Files.copy(Paths.get(source), copy, StandardCopyOption.REPLACE_EXISTING)
 
-        val updater = XmlUpdater(copy.toString())
+        val updater = PropertiesUpdater(copy.toString())
 
         updater.update(
             HashMap<String, String>().apply {
@@ -31,23 +31,22 @@ class XmlUpdaterTest {
                 put("key2", "another value 2")
                 put("key3", "another value 3")
                 put("key3", "another value 3")
-                put("sections[0]", "Section de recherche")
-                put("sections[1]", "Section retrouvée")
+                put("sections", "Section de recherche, Section retrouvée")
             },
             false
         )
 
-        assertThat(copy).hasSameContentAs(Paths.get(expected))
+        assertHaveSameProperties(copy, Paths.get(expected))
     }
 
     @Test
     fun testCreateWording() {
-        val expected = "src/test/resources/new-strings-expected.xml"
+        val expected = "src/test/resources/new-messages-expected.properties"
 
         testProjectDir.create()
-        val dest = Paths.get(testProjectDir.root.absolutePath, "testCreateWording.xml")
+        val dest = Paths.get(testProjectDir.root.absolutePath, "testCreateWording.properties")
 
-        val updater = XmlUpdater(dest.toString())
+        val updater = PropertiesUpdater(dest.toString())
 
         updater.update(
             HashMap<String, String>().apply {
@@ -55,25 +54,24 @@ class XmlUpdaterTest {
                 put("key2", "another value 2")
                 put("key3", "another value 3")
                 put("key3", "another value 3")
-                put("sections[0]", "Section de recherche")
-                put("sections[1]", "Section retrouvée")
+                put("sections", "Section de recherche, Section retrouvée")
             },
             true
         )
 
-        assertThat(dest).hasSameContentAs(Paths.get(expected))
+        assertHaveSameProperties(dest, Paths.get(expected))
     }
 
     @Test
     fun testPartialUpdateWording() {
-        val source = "src/test/resources/partial-strings.xml"
-        val expected = "src/test/resources/partial-strings-expected.xml"
+        val source = "src/test/resources/partial-messages.properties"
+        val expected = "src/test/resources/partial-messages-expected.properties"
 
         testProjectDir.create()
-        val copy = Paths.get(testProjectDir.root.absolutePath, "testPartialUpdateWording.xml")
+        val copy = Paths.get(testProjectDir.root.absolutePath, "testPartialUpdateWording.properties")
         Files.copy(Paths.get(source), copy, StandardCopyOption.REPLACE_EXISTING)
 
-        val updater = XmlUpdater(copy.toString())
+        val updater = PropertiesUpdater(copy.toString())
 
         updater.update(
             HashMap<String, String>().apply {
@@ -81,12 +79,17 @@ class XmlUpdaterTest {
                 put("key2", "another value 2")
                 put("key3", "another value 3")
                 put("key3", "another value 3")
-                put("sections[0]", "Section de recherche")
-                put("sections[1]", "Section retrouvée")
+                put("sections", "Section de recherche, Section retrouvée")
             },
             true
         )
 
-        assertThat(copy).hasSameContentAs(Paths.get(expected))
+        assertHaveSameProperties(copy, Paths.get(expected))
     }
+}
+
+private fun assertHaveSameProperties(source: Path, expected: Path) {
+    val sourceProp = loadOrCreateProperties(source)
+    val expectedProp = loadOrCreateProperties(expected)
+    assertThat(sourceProp).isEqualTo(expectedProp)
 }

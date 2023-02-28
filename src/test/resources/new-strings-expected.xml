@@ -1,9 +1,0 @@
-<resources>
-    <string name="key1">another value 1</string>
-    <string name="key2">another value 2</string>
-    <string name="key3">another value 3</string>
-    <string-array name="sections">
-        <item>Section de recherche</item>
-        <item>Section retrouvée</item>
-    </string-array>
-</resources>

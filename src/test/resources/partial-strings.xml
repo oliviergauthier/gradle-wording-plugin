@@ -1,8 +1,0 @@
-<resources>
-    <string name="key1" translatable="fale">Bad value 1</string>
-    <string name="key2" formatted="true">Bad value 2</string>
-    <string-array name="sections">
-        <item>Bad section 2</item>
-    </string-array>
-    <string name="unknown_key">Value</string>
-</resources>

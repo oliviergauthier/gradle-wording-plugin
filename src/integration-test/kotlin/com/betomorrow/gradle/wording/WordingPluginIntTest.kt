@@ -34,15 +34,15 @@ class WordingPluginIntTest {
 
                 languages {
                     'default' {
-                        output = "src/main/res/values/strings.xml"
+                        output = "src/main/resources/messages.properties"
                         column = "C"
                     }
                     'fr' {
-//                        output = "src/main/res/values-fr/strings.xml"
+//                        output = "src/main/resources/messages_fr.properties"
                         column = "D"
                     }
                     'es' {
-//                        output = "src/main/res/values-es/strings.xml"
+//                        output = "src/main/resources/messages_es.properties"
                         column = "E"
                     }
                 }
