@@ -1,14 +1,15 @@
-package com.betomorrow.gradle.wording.domain
+package com.betomorrow.gradle.wording.domain.updater
 
 import org.w3c.dom.Document
 import org.w3c.dom.Element
+import java.nio.file.Path
 
-class XmlUpdater(val path: String) {
+class XmlWordingUpdater(private val path: Path) : WordingUpdater {
 
     /**
      * Update file with wording and returns updated keys
      */
-    fun update(wording: Map<String, String>, addMissingWording: Boolean) : Set<String> {
+    override fun update(wording: Map<String, String>, addMissingWording: Boolean): Set<String> {
 
         val outputKeys = HashSet<String>()
 
@@ -22,13 +23,13 @@ class XmlUpdater(val path: String) {
             val resource = document.firstOrCreateTagName(RESOURCE_TAG_NAME)
             addMissingStrings(
                 resource,
-                missingWordings.filter { !sectionPattern.matches(it)},
+                missingWordings.filter { !sectionPattern.matches(it) },
                 wording
             )
 
             addMissingStringArrays(
                 resource,
-                missingWordings.filter { sectionPattern.matches(it)},
+                missingWordings.filter { sectionPattern.matches(it) },
                 wording
             )
             outputKeys.addAll(wording.keys)
@@ -53,8 +54,8 @@ class XmlUpdater(val path: String) {
         document.getElementsIteratorByTagName(STRING_ARRAY_TAG_NAME).forEach { node ->
             val key = node.getAttribute(NAME_ATTR)
             val childs = (node as Element).getElementsByTagName(ITEM_TAG_NAME)
-            for(c in 0 until childs.length) {
-                val subKey  = "$key[$c]"
+            for (c in 0 until childs.length) {
+                val subKey = "$key[$c]"
                 if (wording.containsKey(subKey)) {
                     childs.item(c).textContent = wording[subKey]
                     outputKeys.add(subKey)
@@ -63,32 +64,31 @@ class XmlUpdater(val path: String) {
         }
     }
 
-    private fun addMissingStrings(resources: Element, keys : List<String>, wording: Map<String, String>) {
+    private fun addMissingStrings(resources: Element, keys: List<String>, wording: Map<String, String>) {
         keys.forEach { key ->
             resources.appendNewChild(STRING_TAG_NAME) {
                 setAttribute(NAME_ATTR, key)
                 wording[key]?.let {
                     appendTextNode(it)
                 }
-
             }
         }
     }
 
-    private fun addMissingStringArrays(resources: Element, keys : List<String>, wording: Map<String, String>) {
+    private fun addMissingStringArrays(resources: Element, keys: List<String>, wording: Map<String, String>) {
         val arraysSizes = computeStringArraysSize(keys)
 
         arraysSizes.forEach { key, value ->
             val node = resources
                 .getElementsIteratorByTagName(STRING_ARRAY_TAG_NAME)
-                .firstOrNull {  it.hasAttribute(NAME_ATTR, key) }
-                ?:resources.appendNewChild(STRING_ARRAY_TAG_NAME) {
+                .firstOrNull { it.hasAttribute(NAME_ATTR, key) }
+                ?: resources.appendNewChild(STRING_ARRAY_TAG_NAME) {
                     setAttribute(NAME_ATTR, key)
                 }
 
             val elt = node as Element
             val missingNodeCount = value - elt.getElementsByTagName(ITEM_TAG_NAME).length
-            for(i in 0 until missingNodeCount) {
+            for (i in 0 until missingNodeCount) {
                 elt.appendNewChild(ITEM_TAG_NAME)
             }
         }
@@ -96,14 +96,14 @@ class XmlUpdater(val path: String) {
         updateStringArrays(resources.ownerDocument, wording, HashSet())
     }
 
-    private fun computeStringArraysSize(keys : List<String>) : Map<String, Int> {
+    private fun computeStringArraysSize(keys: List<String>): Map<String, Int> {
         val values = HashMap<String, Int>()
         keys.forEach {
             val result = sectionPattern.find(it)
             if (result != null) {
                 val key = result.groupValues[1]
                 val index = result.groupValues[2]
-                values[key] = Math.max(values[key]?:1, index.toInt() + 1 )
+                values[key] = Math.max(values[key] ?: 1, index.toInt() + 1)
             }
         }
         return values
@@ -117,5 +117,4 @@ class XmlUpdater(val path: String) {
         const val ITEM_TAG_NAME = "item"
         const val NAME_ATTR = "name"
     }
-
 }

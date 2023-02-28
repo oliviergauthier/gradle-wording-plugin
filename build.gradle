@@ -1,6 +1,8 @@
 buildscript {
     ext {
+        jvmTarget = JavaVersion.VERSION_11
         kotlinVersion = '1.5.30'
+        ktlintVersion = "10.2.1"
     }
     repositories {
         mavenCentral()
@@ -16,6 +18,7 @@ buildscript {
 
 plugins {
     id 'org.jetbrains.kotlin.jvm' version "${kotlinVersion}"
+    id "org.jlleitschuh.gradle.ktlint" version "${ktlintVersion}"
 }
 
 apply plugin: "com.gradle.plugin-publish"
@@ -24,7 +27,7 @@ apply plugin: 'kotlin'
 apply plugin: 'maven-publish'
 
 group 'gradle.plugin.com.betomorrow.gradle'
-version '2.0.4'
+version '1.0.0'
 
 repositories {
     mavenCentral()
@@ -44,6 +47,8 @@ dependencies {
     // Testing
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.3.1")
+    testImplementation('org.jetbrains.kotlin:kotlin-test-junit5:1.5.30')
 
     testImplementation 'org.assertj:assertj-core:3.11.1'
     testImplementation gradleTestKit()
@@ -52,14 +57,21 @@ dependencies {
     testRuntimeOnly "org.objenesis:objenesis:2.4"    // allows mocking of classes without default constructor (together with CGLIB)
 }
 
-sourceCompatibility = JavaVersion.VERSION_11
-targetCompatibility = JavaVersion.VERSION_11
+sourceCompatibility = project.ext.jvmTarget
+targetCompatibility = project.ext.jvmTarget
 
 compileKotlin {
-    kotlinOptions.jvmTarget = JavaVersion.VERSION_11
+    kotlinOptions {
+        freeCompilerArgs = ["-Xjsr305=strict"]
+        jvmTarget = project.ext.jvmTarget.toString()
+    }
 }
+
 compileTestKotlin {
-    kotlinOptions.jvmTarget = JavaVersion.VERSION_11
+    kotlinOptions {
+        freeCompilerArgs = ["-Xjsr305=strict"]
+        jvmTarget = project.ext.jvmTarget.toString()
+    }
 }
 
 test {
@@ -74,15 +86,15 @@ sourceSets {
         java {
             compileClasspath += main.output + test.output
             runtimeClasspath += main.output + test.output
-            srcDir file('src/integration-test/java')
+            srcDir file('src/integration-test/kotlin')
+            sourceCompatibility = project.ext.jvmTarget
+            targetCompatibility = project.ext.jvmTarget
         }
         resources.srcDir file('src/integration-test/resources')
     }
 }
 
 configurations {
-    integrationTestCompile.extendsFrom testCompile
-    integrationTestRuntime.extendsFrom testRuntime
     integrationTestImplementation.extendsFrom testImplementation
     integrationTestRuntime.extendsFrom testRuntime
 }
@@ -90,7 +102,15 @@ configurations {
 task integrationTest(type: Test, group: "verification") {
     testClassesDirs = sourceSets.integrationTest.output.classesDirs
     classpath = sourceSets.integrationTest.runtimeClasspath
+    useJUnitPlatform()
     outputs.upToDateWhen { false }
+}
+
+compileIntegrationTestKotlin {
+    kotlinOptions {
+        freeCompilerArgs = ["-Xjsr305=strict"]
+        jvmTarget = project.ext.jvmTarget.toString()
+    }
 }
 
 check.dependsOn integrationTest
@@ -126,7 +146,7 @@ pluginBundle {
 
     website = 'https://github.com/oliviergauthier/gradle-wording-plugin'
     vcsUrl = 'https://github.com/oliviergauthier/gradle-wording-plugin'
-    tags = ['android', 'wording', 'plugin', 'tool']
+    tags = ['android', 'spring', 'wording', 'plugin', 'tool']
 
     plugins {
 
@@ -135,7 +155,5 @@ pluginBundle {
             displayName = 'Gradle Wording Plugin'
             description = 'Plugin to import wording from Google Sheet then integrate it in standard translations files.'
         }
-
     }
-
 }

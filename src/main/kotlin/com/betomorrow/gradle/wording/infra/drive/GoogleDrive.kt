@@ -1,24 +1,28 @@
 package com.betomorrow.gradle.wording.infra.drive
 
 import com.google.api.client.auth.oauth2.Credential
-import com.google.api.client.json.jackson2.JacksonFactory
-import com.google.api.services.drive.DriveScopes
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
 import com.google.api.client.http.javanet.NetHttpTransport
+import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.client.util.store.FileDataStoreFactory
 import com.google.api.services.drive.Drive
+import com.google.api.services.drive.DriveScopes
 import com.google.common.io.Files
-import java.io.*
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStreamReader
 
 class GoogleDrive(private val tokenDirectory: String = TOKENS_DIRECTORY_PATH) {
 
-    private var credentials : File? = null
+    private var credentials: File? = null
     private var clientId: String? = null
-    private var clientSecret : String? = null
+    private var clientSecret: String? = null
 
     constructor(clientId: String?, clientSecret: String?, tokenDirectory: String = TOKENS_DIRECTORY_PATH) : this(tokenDirectory) {
         this.clientId = clientId
@@ -29,7 +33,7 @@ class GoogleDrive(private val tokenDirectory: String = TOKENS_DIRECTORY_PATH) {
         this.credentials = credentials
     }
 
-    private fun getAuthorizationCodeFlowBuilder(httpTransport: NetHttpTransport) : GoogleAuthorizationCodeFlow.Builder {
+    private fun getAuthorizationCodeFlowBuilder(httpTransport: NetHttpTransport): GoogleAuthorizationCodeFlow.Builder {
         if (clientId != null && clientSecret != null) {
             return GoogleAuthorizationCodeFlow.Builder(httpTransport, jsonFactory, clientId, clientSecret, SCOPES)
         }
@@ -60,16 +64,18 @@ class GoogleDrive(private val tokenDirectory: String = TOKENS_DIRECTORY_PATH) {
             .authorize("user")
     }
 
-    fun downloadFile(fileId : String, mimeType: DriveMimeType, output: File) {
+    fun downloadFile(fileId: String, mimeType: DriveMimeType, output: File) {
         return downloadFile(fileId, mimeType.value, output)
     }
 
-    fun downloadFile(fileId : String, mimeType: String? = null, output: File) {
+    fun downloadFile(fileId: String, mimeType: String? = null, output: File) {
         val httpTransport = GoogleNetHttpTransport.newTrustedTransport()
 
         val service = Drive
-            .Builder(httpTransport,
-                jsonFactory, getCredentials(httpTransport))
+            .Builder(
+                httpTransport,
+                jsonFactory, getCredentials(httpTransport)
+            )
             .setApplicationName(APPLICATION_NAME)
             .build()
 

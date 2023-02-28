@@ -1,5 +1,6 @@
 package com.betomorrow.gradle.wording.domain
 
+import com.betomorrow.gradle.wording.domain.xlsx.Column
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -17,7 +18,6 @@ class ColumnTest {
         val col = Column("b")
         Assertions.assertThat(col.index).isEqualTo(1)
     }
-
 
     @Test
     fun testWithColumnZ() {

@@ -1,0 +1,26 @@
+buildscript {
+   repositories {
+       mavenLocal()
+       jcenter()
+   }
+   dependencies {
+       classpath "gradle.plugin.com.betomorrow.gradle:gradle-wording-plugin:1.4.0"
+   }
+}
+
+apply plugin: 'com.betomorrow.gradle.wording'
+
+wording {
+    sheetId = "1UznpBPuRddr5gYPnRhNxkP-bcU0NHkhpTqi6B5V0QL0"
+    keysColumn = "A"
+    addMissingKeys = true
+    outputFormat = "XML"
+    languages {
+        'default' {
+            column = "C"
+        }
+        'fr' {
+            column = "D"
+        }
+    }
+}
