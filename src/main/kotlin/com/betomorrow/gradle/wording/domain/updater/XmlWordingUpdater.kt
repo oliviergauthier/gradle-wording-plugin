@@ -1,14 +1,15 @@
-package com.betomorrow.gradle.wording.domain
+package com.betomorrow.gradle.wording.domain.updater
 
 import org.w3c.dom.Document
 import org.w3c.dom.Element
+import java.nio.file.Path
 
-class XmlUpdater(val path: String) {
+class XmlWordingUpdater(private val path: Path) : WordingUpdater {
 
     /**
      * Update file with wording and returns updated keys
      */
-    fun update(wording: Map<String, String>, addMissingWording: Boolean): Set<String> {
+    override fun update(wording: Map<String, String>, addMissingWording: Boolean): Set<String> {
 
         val outputKeys = HashSet<String>()
 

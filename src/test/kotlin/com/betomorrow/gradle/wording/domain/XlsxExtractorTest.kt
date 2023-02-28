@@ -1,5 +1,7 @@
 package com.betomorrow.gradle.wording.domain
 
+import com.betomorrow.gradle.wording.domain.xlsx.Column
+import com.betomorrow.gradle.wording.domain.xlsx.XlsxExtractor
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

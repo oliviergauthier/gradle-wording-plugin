@@ -48,6 +48,7 @@ class WordingPlugin : Plugin<Project> {
                         t.skipHeaders = wordingExtension.skipHeaders
                         t.source = wordingExtension.wordingFile
                         t.output = language.outputFile
+                        t.outputFormat = wordingExtension.outputFormat
                         t.keysColumn = wordingExtension.keysColumn
                         t.column = language.column
                         t.sheetNames = wordingExtension.sheetNames

@@ -1,23 +1,21 @@
-package com.betomorrow.gradle.wording.domain
+package com.betomorrow.gradle.wording.domain.updater
 
-import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
 import java.util.Properties
 
-class PropertiesUpdater(val path: String) {
+class PropertiesWordingUpdater(private val path: Path) : WordingUpdater {
 
     /**
      * Update file with wording and returns updated keys
      */
-    fun update(wording: Map<String, String>, addMissingWording: Boolean): Set<String> {
+    override fun update(wording: Map<String, String>, addMissingWording: Boolean): Set<String> {
 
         val outputKeys = HashSet<String>()
 
-        val properties = loadOrCreateProperties(Paths.get(path))
+        val properties = loadOrCreateProperties(path)
 
         updateStrings(properties, wording, outputKeys)
 
@@ -64,6 +62,6 @@ fun loadOrCreateProperties(path: Path): Properties {
     return prop
 }
 
-fun writeToFile(properties: Properties, path: String) {
-    properties.store(FileWriter(File(path)), null)
+fun writeToFile(properties: Properties, path: Path) {
+    properties.store(FileWriter(path.toFile()), null)
 }

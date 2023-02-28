@@ -1,5 +1,6 @@
 package com.betomorrow.gradle.wording.extensions
 
+import com.betomorrow.gradle.wording.domain.OutputFormat
 import org.gradle.api.Action
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Project
@@ -23,6 +24,8 @@ open class WordingPluginExtension(val project: Project) {
     var keysColumn: String = "A"
 
     var addMissingKeys: Boolean = false
+
+    var outputFormat: OutputFormat = OutputFormat.XML
 
     var languages: NamedDomainObjectContainer<WordingLanguageExtension> = project.container(WordingLanguageExtension::class.java) {
         WordingLanguageExtension(it, project)

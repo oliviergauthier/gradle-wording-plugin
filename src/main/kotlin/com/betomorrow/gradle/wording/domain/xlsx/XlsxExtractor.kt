@@ -1,4 +1,4 @@
-package com.betomorrow.gradle.wording.domain
+package com.betomorrow.gradle.wording.domain.xlsx
 
 import org.apache.poi.ss.usermodel.WorkbookFactory
 import java.io.File

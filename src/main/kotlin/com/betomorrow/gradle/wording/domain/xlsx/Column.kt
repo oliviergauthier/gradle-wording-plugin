@@ -1,4 +1,4 @@
-package com.betomorrow.gradle.wording.domain
+package com.betomorrow.gradle.wording.domain.xlsx
 
 class Column(val name: String) {
 

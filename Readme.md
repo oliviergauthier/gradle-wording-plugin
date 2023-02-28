@@ -94,14 +94,15 @@ wording {
 
     skipHeaders = true                  // Ski headersOptional, default: true
     addMissingKeys = true               // Add missing key from sheet in wording files, if false, it will throw errors on default wording file when missing keys. Default true
+    outputFormat = "PROPERTIES"         // Optional, default: "XML"
 
     languages {
         'default' {
-            output "src/main/resources/messages.properties" // Optional, default: "src/main/resources/messages.properties"
+            output "src/main/resources/messages.properties" // Optional, default: "src/main/res/values/strings.xml"
             column = "B"
         }
         'fr' {
-            output = "src/main/resources/messages_france.properties" // Optional, default: "src/main/resources/messages_<LANGUAGE>.properties"
+            output = "src/main/resources/messages_france.properties" // Optional, default: "src/main/res/values-<LANGUAGE>/strings.xml"
             column = "C"
         }
         // [...] Add more languages here
