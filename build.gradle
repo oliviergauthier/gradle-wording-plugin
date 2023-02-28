@@ -146,7 +146,7 @@ pluginBundle {
 
     website = 'https://github.com/oliviergauthier/gradle-wording-plugin'
     vcsUrl = 'https://github.com/oliviergauthier/gradle-wording-plugin'
-    tags = ['android', 'wording', 'plugin', 'tool']
+    tags = ['android', 'spring', 'wording', 'plugin', 'tool']
 
     plugins {
 
