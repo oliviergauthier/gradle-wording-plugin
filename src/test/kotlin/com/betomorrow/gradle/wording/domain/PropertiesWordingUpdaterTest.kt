@@ -1,7 +1,7 @@
 package com.betomorrow.gradle.wording.domain
 
-import com.betomorrow.gradle.wording.domain.updater.PropertiesWordingUpdater
-import com.betomorrow.gradle.wording.domain.updater.loadOrCreateProperties
+import com.betomorrow.gradle.wording.domain.updater.properties.PropertiesWordingUpdater
+import com.betomorrow.gradle.wording.domain.updater.properties.loadOrCreateProperties
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.internal.impldep.org.junit.Rule
 import org.gradle.internal.impldep.org.junit.rules.TemporaryFolder

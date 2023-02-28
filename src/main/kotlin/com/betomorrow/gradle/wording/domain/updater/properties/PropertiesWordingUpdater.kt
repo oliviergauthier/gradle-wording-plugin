@@ -1,5 +1,6 @@
-package com.betomorrow.gradle.wording.domain.updater
+package com.betomorrow.gradle.wording.domain.updater.properties
 
+import com.betomorrow.gradle.wording.domain.updater.WordingUpdater
 import java.io.FileReader
 import java.io.FileWriter
 import java.nio.file.Files

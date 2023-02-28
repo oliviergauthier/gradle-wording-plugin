@@ -39,15 +39,16 @@ class WordingPlugin : Plugin<Project> {
                 updateWordingTask.mustRunAfter(downloadWordingTask)
 
                 wordingExtension.languages.forEach { language ->
+                    val outputFile = language.getOutputFile(wordingExtension.outputFormat)
                     val task = p.tasks.register(
                         "updateWording${language.name.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }}",
                         UpdateWordingTask::class.java
                     ) { t ->
                         t.group = GROUP
-                        t.description = "Update wording file ${language.outputFile.relativeTo(project.projectDir)}"
+                        t.description = "Update wording file ${outputFile.relativeTo(project.projectDir)}"
                         t.skipHeaders = wordingExtension.skipHeaders
                         t.source = wordingExtension.wordingFile
-                        t.output = language.outputFile
+                        t.output = outputFile
                         t.outputFormat = wordingExtension.outputFormat
                         t.keysColumn = wordingExtension.keysColumn
                         t.column = language.column

@@ -11,7 +11,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "com.gradle.publish:plugin-publish-plugin:0.14.0"
+        classpath "com.gradle.publish:plugin-publish-plugin:0.15.0"
     }
 }
 
@@ -26,11 +26,24 @@ apply plugin: 'java-gradle-plugin'
 apply plugin: 'kotlin'
 apply plugin: 'maven-publish'
 
-group 'gradle.plugin.com.betomorrow.gradle'
-version '1.0.0'
+group 'com.betomorrow.gradle-plugins'
+version '3.0.3'
+
+ext {
+    notSnapshot = { !version.endsWith("SNAPSHOT") }
+}
 
 repositories {
     mavenCentral()
+}
+
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == 'org.jetbrains.kotlin') {
+            details.useVersion "${kotlinVersion}"
+        }
+    }
 }
 
 dependencies {
@@ -102,8 +115,10 @@ configurations {
 task integrationTest(type: Test, group: "verification") {
     testClassesDirs = sourceSets.integrationTest.output.classesDirs
     classpath = sourceSets.integrationTest.runtimeClasspath
-    useJUnitPlatform()
     outputs.upToDateWhen { false }
+    mustRunAfter test
+
+    useJUnitPlatform()
 }
 
 compileIntegrationTestKotlin {
@@ -114,10 +129,6 @@ compileIntegrationTestKotlin {
 }
 
 check.dependsOn integrationTest
-
-gradlePlugin {
-    testSourceSets sourceSets.integrationTest
-}
 
 /**
  * Publishing
@@ -142,6 +153,16 @@ wrapper {
     distributionType = Wrapper.DistributionType.ALL
 }
 
+gradlePlugin {
+    testSourceSets sourceSets.integrationTest
+    plugins {
+        wordingPlugin {
+            id = 'com.betomorrow.gradle.wording'
+            implementationClass = 'com.betomorrow.gradle.wording.WordingPlugin'
+        }
+    }
+}
+
 pluginBundle {
 
     website = 'https://github.com/oliviergauthier/gradle-wording-plugin'
@@ -149,11 +170,14 @@ pluginBundle {
     tags = ['android', 'spring', 'wording', 'plugin', 'tool']
 
     plugins {
-
-        libraryPlugin {
+        wordingPlugin {
             id = 'com.betomorrow.gradle.wording'
             displayName = 'Gradle Wording Plugin'
             description = 'Plugin to import wording from Google Sheet then integrate it in standard translations files.'
         }
     }
+}
+
+publishPlugins {
+    onlyIf notSnapshot
 }

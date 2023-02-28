@@ -1,0 +1,9 @@
+<resources>
+    <string name="key1">fr value 1</string>
+    <string name="key2">fr value 2</string>
+    <string name="key3">fr value 3</string>
+    <string-array name="sections">
+        <item>fr section 1</item>
+        <item>fr section 2</item>
+    </string-array>
+</resources>

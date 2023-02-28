@@ -4,7 +4,7 @@ buildscript {
        jcenter()
    }
    dependencies {
-       classpath "gradle.plugin.com.betomorrow.gradle:gradle-wording-plugin:1.4.0"
+       classpath "com.betomorrow.gradle-plugins:gradle-wording-plugin:3.0.0"
    }
 }
 

@@ -1,6 +1,6 @@
 package com.betomorrow.gradle.wording.domain
 
-import com.betomorrow.gradle.wording.domain.updater.XmlWordingUpdater
+import com.betomorrow.gradle.wording.domain.updater.xml.XmlWordingUpdater
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.internal.impldep.org.junit.Rule
 import org.gradle.internal.impldep.org.junit.rules.TemporaryFolder

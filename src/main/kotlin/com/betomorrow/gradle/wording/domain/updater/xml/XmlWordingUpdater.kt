@@ -1,5 +1,6 @@
-package com.betomorrow.gradle.wording.domain.updater
+package com.betomorrow.gradle.wording.domain.updater.xml
 
+import com.betomorrow.gradle.wording.domain.updater.WordingUpdater
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import java.nio.file.Path

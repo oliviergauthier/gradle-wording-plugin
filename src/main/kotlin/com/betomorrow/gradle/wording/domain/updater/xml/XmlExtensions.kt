@@ -1,4 +1,4 @@
-package com.betomorrow.gradle.wording.domain.updater
+package com.betomorrow.gradle.wording.domain.updater.xml
 
 import org.w3c.dom.Document
 import org.w3c.dom.Element
