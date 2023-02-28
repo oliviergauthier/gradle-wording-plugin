@@ -25,7 +25,7 @@ class PropertiesWordingUpdaterTest {
         val copy = Paths.get(testProjectDir.root.absolutePath, "testUpdateExistingWording.properties")
         Files.copy(Paths.get(source), copy, StandardCopyOption.REPLACE_EXISTING)
 
-        val updater = PropertiesWordingUpdater(copy.toString())
+        val updater = PropertiesWordingUpdater(copy)
 
         updater.update(
             HashMap<String, String>().apply {
@@ -48,7 +48,7 @@ class PropertiesWordingUpdaterTest {
         testProjectDir.create()
         val dest = Paths.get(testProjectDir.root.absolutePath, "testCreateWording.properties")
 
-        val updater = PropertiesWordingUpdater(dest.toString())
+        val updater = PropertiesWordingUpdater(dest)
 
         updater.update(
             HashMap<String, String>().apply {
@@ -73,7 +73,7 @@ class PropertiesWordingUpdaterTest {
         val copy = Paths.get(testProjectDir.root.absolutePath, "testPartialUpdateWording.properties")
         Files.copy(Paths.get(source), copy, StandardCopyOption.REPLACE_EXISTING)
 
-        val updater = PropertiesWordingUpdater(copy.toString())
+        val updater = PropertiesWordingUpdater(copy)
 
         updater.update(
             HashMap<String, String>().apply {

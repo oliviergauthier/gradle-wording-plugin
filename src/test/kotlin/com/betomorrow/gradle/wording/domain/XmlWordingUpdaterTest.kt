@@ -24,7 +24,7 @@ class XmlWordingUpdaterTest {
         val copy = Paths.get(testProjectDir.root.absolutePath, "testUpdateExistingWording.xml")
         Files.copy(Paths.get(source), copy, StandardCopyOption.REPLACE_EXISTING)
 
-        val updater = XmlWordingUpdater(copy.toString())
+        val updater = XmlWordingUpdater(copy)
 
         updater.update(
             HashMap<String, String>().apply {
@@ -48,7 +48,7 @@ class XmlWordingUpdaterTest {
         testProjectDir.create()
         val dest = Paths.get(testProjectDir.root.absolutePath, "testCreateWording.xml")
 
-        val updater = XmlWordingUpdater(dest.toString())
+        val updater = XmlWordingUpdater(dest)
 
         updater.update(
             HashMap<String, String>().apply {
@@ -74,7 +74,7 @@ class XmlWordingUpdaterTest {
         val copy = Paths.get(testProjectDir.root.absolutePath, "testPartialUpdateWording.xml")
         Files.copy(Paths.get(source), copy, StandardCopyOption.REPLACE_EXISTING)
 
-        val updater = XmlWordingUpdater(copy.toString())
+        val updater = XmlWordingUpdater(copy)
 
         updater.update(
             HashMap<String, String>().apply {
