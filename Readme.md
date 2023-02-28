@@ -1,8 +1,11 @@
-# Spring Messages Wording Gradle Plugin
+# Android and Spring Messages Wording Gradle Plugin
 
 ## Summary
 
-This plugin allow you to manage android app's wording with simple Google Sheet file. Just create a sheet with columns for keys and wording. The plugin will generate or update existing strings files. Your product owner will be able to edit himself apllication's wording
+This plugin allow you to manage android app's wording with simple Google Sheet file.
+Just create a sheet with columns for keys and wording.
+The plugin will generate or update existing strings files.
+Your product owner will be able to edit himself wording for Spring or Android applications.
 
 ## Quick Start
 
@@ -23,7 +26,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "gradle.plugin.com.betomorrow.gradle:gradle-spring-wording-plugin:1.0.0"
+        classpath "gradle.plugin.com.betomorrow.gradle:gradle-wording-plugin:1.4.0"
     }
 }
 ```
@@ -63,13 +66,14 @@ Copy / Paste url in your browser, accept authorization and close browser
 
 [Authorization Sample](https://github.com/oliviergauthier/gradle-wording-plugin/blob/master/images/authorization.png)
 
-It will update wording files. In this sample, `src/main/resources/messages.properties` and `src/main/resources/messages_fr.properties`
+It will update wording files. In this sample, for xml output it will be `app/src/main/res/values/strings.xml` and `app/src/main/res/values-fr/strings.xml`
+or for properties output, it will be `src/main/resources/messages.properties` and `src/main/resources/messages_fr.properties`
 
 ## Tasks
 
 Plugin creates several tasks to manage wording :
 
-- **downloadWording** : Export sheet in local xlsx file that you can commit for later edit. It prevent risks to have unwanted wording changes when you fix bugs
+- **downloadWording** : Export sheet in local xlsx file that you can commit for later edit. It prevents risks to have unwanted wording changes when you fix bugs
 - **updateWording** : Update all wording files
 - **upgradeWording** : Download and update all wording files
 
