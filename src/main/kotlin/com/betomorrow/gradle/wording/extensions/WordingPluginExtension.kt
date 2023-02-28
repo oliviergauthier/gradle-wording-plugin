@@ -25,7 +25,7 @@ open class WordingPluginExtension(val project: Project) {
 
     var addMissingKeys: Boolean = false
 
-    var outputFormat: OutputFormat = OutputFormat.XML
+    var outputFormat: OutputFormat = OutputFormat.ANDROID
 
     var languages: NamedDomainObjectContainer<WordingLanguageExtension> = project.container(WordingLanguageExtension::class.java) {
         WordingLanguageExtension(it, project)

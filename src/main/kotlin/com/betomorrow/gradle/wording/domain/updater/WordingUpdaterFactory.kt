@@ -6,8 +6,8 @@ import java.nio.file.Path
 class WordingUpdaterFactory {
     fun build(outputFormat: OutputFormat, path: Path): WordingUpdater {
         return when (outputFormat) {
-            OutputFormat.XML -> XmlWordingUpdater(path)
-            OutputFormat.PROPERTIES -> PropertiesWordingUpdater(path)
+            OutputFormat.ANDROID -> XmlWordingUpdater(path)
+            OutputFormat.SPRING -> PropertiesWordingUpdater(path)
         }
     }
 }

@@ -41,7 +41,7 @@ open class UpdateWordingTask : DefaultTask() {
     var addMissingKeys = false
 
     @Input
-    var outputFormat = OutputFormat.XML
+    var outputFormat = OutputFormat.ANDROID
 
     @TaskAction
     fun update() {
